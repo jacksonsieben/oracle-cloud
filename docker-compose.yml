@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    container_name: oracle_cloud
+    ports:
+      - "8081:8081"
+    environment:
+      - JAVA_OPTS=-Xmx512m
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:
