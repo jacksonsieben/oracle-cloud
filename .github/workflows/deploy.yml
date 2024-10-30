@@ -1,0 +1,32 @@
+name: Deploy to Oracle Cloud
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy to Oracle Cloud
+      run: |
+        # Defina as variáveis
+        INSTANCE_IP="${{ secrets.INSTANCE_IP }}"
+        SSH_USER="opc"
+        
+        ssh -o StrictHostKeyChecking=no $SSH_USER@$INSTANCE_IP << EOF
+          cd /caminho/para/seu/projeto/oracle-cloud || exit
+          git pull origin master
+          sudo docker compose down
+          sudo docker compose up -d
+        EOF
