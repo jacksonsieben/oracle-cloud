@@ -20,12 +20,18 @@ jobs:
 
     - name: Deploy to Oracle Cloud
       env:
-        INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
+        INSTANCE_IP: ${{ secrets.INSTANCE_IP }} 
       run: |
         SSH_USER="ubuntu"  # Mudar para o usuário correto
         
         ssh -o StrictHostKeyChecking=no $SSH_USER@$INSTANCE_IP << EOF
-          cd /oracle-cloud || exit
+          # Verificar e criar o diretório se não existir
+          if [ ! -d "~/oracle-cloud" ]; then
+            echo "Diretório ~/oracle-cloud não existe. Criando..."
+            mkdir -p ~/oracle-cloud
+          fi
+
+          cd ~/oracle-cloud || exit
           git pull origin master
           sudo docker compose down
           sudo docker compose up -d
