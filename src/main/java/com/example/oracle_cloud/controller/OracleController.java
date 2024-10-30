@@ -11,4 +11,9 @@ public class OracleController {
     public String isOn() {
         return "Server Oracle Cloud is Online!";
     }
+
+    @GetMapping("/off")
+    public String isOff() {
+        return "Server Oracle Cloud is not Offline!";
+    }
 }
