@@ -19,13 +19,13 @@ jobs:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Deploy to Oracle Cloud
+      env:
+        INSTANCE_IP: ${{ secrets.INSTANCE_IP }}
       run: |
-        # Defina as variáveis
-        INSTANCE_IP="${{ secrets.INSTANCE_IP }}"
-        SSH_USER="opc"
+        SSH_USER="ubuntu"  # Mudar para o usuário correto
         
         ssh -o StrictHostKeyChecking=no $SSH_USER@$INSTANCE_IP << EOF
-          cd /caminho/para/seu/projeto/oracle-cloud || exit
+          cd /oracle-cloud || exit
           git pull origin master
           sudo docker compose down
           sudo docker compose up -d
